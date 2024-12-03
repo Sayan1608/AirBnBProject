@@ -1,0 +1,6 @@
+package com.codingshuttle.projects.entities.enums;
+
+public enum Role {
+    GUEST,
+    HOTEL_MANAGER
+}
