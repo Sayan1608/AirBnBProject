@@ -14,9 +14,7 @@ public class HotelDto {
     private String name;
     private String city;
     private String[] photos;
-    private String amenities;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String[] amenities;
     private HotelContactInfo contactInfo;
     private Boolean active;
 }
