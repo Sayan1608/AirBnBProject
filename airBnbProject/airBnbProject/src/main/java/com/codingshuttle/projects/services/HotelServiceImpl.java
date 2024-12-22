@@ -2,6 +2,7 @@ package com.codingshuttle.projects.services;
 
 import com.codingshuttle.projects.dtos.HotelDto;
 import com.codingshuttle.projects.entities.Hotel;
+import com.codingshuttle.projects.entities.Room;
 import com.codingshuttle.projects.exceptions.ResourceNotFoundException;
 import com.codingshuttle.projects.repositories.HotelRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class HotelServiceImpl implements HotelService{
     private final HotelRepository hotelRepository;
     private final ModelMapper modelMapper;
+    private final InventoryService inventoryService;
 
     public HotelDto createNewHotel(HotelDto hotelDto){
         log.info("Creating a new hotel with name: {}",hotelDto.getName());
@@ -50,7 +52,21 @@ public class HotelServiceImpl implements HotelService{
         //TODO : delete inventory for this hotel
     }
 
-    private Hotel isHotelExistsById(Long id){
+    @Override
+    public void activateHotel(Long id) {
+        log.info("Activating hotel with ID: {}",id);
+        Hotel hotel = isHotelExistsById(id);
+        hotel.setActive(true);
+
+        //create inventory for all rooms of this hotel
+
+        for(Room room : hotel.getRooms()){
+            inventoryService.createInventoryForRoom(room);
+        }
+    }
+
+    @Override
+    public Hotel isHotelExistsById(Long id){
         boolean exists = hotelRepository.existsById(id);
         if(!exists) throw new ResourceNotFoundException("Hotel not found with Id: " + id);
         return hotelRepository.findById(id).get();

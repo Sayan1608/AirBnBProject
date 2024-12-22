@@ -1,8 +1,7 @@
 package com.codingshuttle.projects.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,6 +18,9 @@ import java.time.LocalDateTime;
                 name = "hotel_room_date",
                 columnNames = {"hotel_id", "room_id", "date"}
         ))
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

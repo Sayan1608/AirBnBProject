@@ -37,11 +37,17 @@ public class HotelController {
     }
 
     @DeleteMapping(path = "/{hotelId}")
-    public ResponseEntity<HotelDto> deleteHotelById(@PathVariable Long hotelId){
+    public ResponseEntity<Void> deleteHotelById(@PathVariable Long hotelId){
         log.info("Attempting to delete hotel with id: {}",hotelId);
         hotelService.deleteHotelById(hotelId);
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping(path = "/{hotelId}")
+    public ResponseEntity<Void> activateHotel(@PathVariable Long hotelId){
+        log.info("Attempting to activate hotel with id: {}",hotelId);
+        hotelService.activateHotel(hotelId);
+        return ResponseEntity.noContent().build();
+    }
 
 }
