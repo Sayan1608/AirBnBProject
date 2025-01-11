@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,20 +52,22 @@ public class RoomServiceImpl implements RoomService{
     @Override
     public RoomDto getRoomById(Long roomId) {
         log.info("Fetching room with ID : {}", roomId);
-        Room room = exitsRoomById(roomId);
+        Room room = existsRoomById(roomId);
         return modelMapper.map(room, RoomDto.class);
     }
 
+    @Transactional
     @Override
     public void deleteRoomById(Long roomId) {
         log.info("Deleting room with ID : {}", roomId);
         boolean exists = roomRepository.existsById(roomId);
-        Room room = exitsRoomById(roomId);
-        roomRepository.delete(room);
+        Room room = existsRoomById(roomId);
         //TODO : delete all future inventories for this room
+        inventoryService.deleteInventoriesForRoom(room);
+        roomRepository.delete(room);
     }
 
-    private Room exitsRoomById(Long roomId) {
+    private Room existsRoomById(Long roomId) {
         return roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found with ID: " + roomId));
     }

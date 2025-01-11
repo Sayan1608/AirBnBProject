@@ -3,6 +3,8 @@ package com.codingshuttle.projects.services;
 import com.codingshuttle.projects.dtos.HotelDto;
 import com.codingshuttle.projects.entities.Hotel;
 
+import java.util.List;
+
 public interface HotelService {
     HotelDto createNewHotel(HotelDto hotelDto);
     HotelDto getHotelById(Long id);
@@ -10,4 +12,6 @@ public interface HotelService {
     void deleteHotelById(Long id);
     void activateHotel(Long id);
     Hotel isHotelExistsById(Long id);
+
+    List<HotelDto> getAllHotels();
 }

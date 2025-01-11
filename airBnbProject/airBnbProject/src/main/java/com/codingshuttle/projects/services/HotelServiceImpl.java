@@ -5,10 +5,15 @@ import com.codingshuttle.projects.entities.Hotel;
 import com.codingshuttle.projects.entities.Room;
 import com.codingshuttle.projects.exceptions.ResourceNotFoundException;
 import com.codingshuttle.projects.repositories.HotelRepository;
+import com.codingshuttle.projects.repositories.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -17,6 +22,7 @@ public class HotelServiceImpl implements HotelService{
     private final HotelRepository hotelRepository;
     private final ModelMapper modelMapper;
     private final InventoryService inventoryService;
+    private final RoomRepository roomRepository;
 
     public HotelDto createNewHotel(HotelDto hotelDto){
         log.info("Creating a new hotel with name: {}",hotelDto.getName());
@@ -43,13 +49,18 @@ public class HotelServiceImpl implements HotelService{
         return modelMapper.map(updatedHotel, HotelDto.class);
     }
 
+    @Transactional
     @Override
     public void deleteHotelById(Long id) {
         log.info("Deleting hotel with ID: {}",id);
         Hotel hotel = isHotelExistsById(id);
-        hotelRepository.deleteById(id);
 
         //TODO : delete inventory for this hotel
+        for(Room room : hotel.getRooms()){
+            inventoryService.deleteInventoriesForRoom(room);
+            roomRepository.deleteById(room.getId());
+        }
+        hotelRepository.deleteById(id);
     }
 
     @Override
@@ -70,5 +81,15 @@ public class HotelServiceImpl implements HotelService{
         boolean exists = hotelRepository.existsById(id);
         if(!exists) throw new ResourceNotFoundException("Hotel not found with Id: " + id);
         return hotelRepository.findById(id).get();
+    }
+
+    @Override
+    public List<HotelDto> getAllHotels() {
+        List<Hotel> hotels = hotelRepository.findAll();
+        return hotels
+                .stream()
+                .map(hotel -> modelMapper.map(hotel, HotelDto.class))
+                .collect(Collectors.toList());
+
     }
 }
