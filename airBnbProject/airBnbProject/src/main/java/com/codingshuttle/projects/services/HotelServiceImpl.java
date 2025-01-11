@@ -1,6 +1,8 @@
 package com.codingshuttle.projects.services;
 
 import com.codingshuttle.projects.dtos.HotelDto;
+import com.codingshuttle.projects.dtos.HotelInfoDto;
+import com.codingshuttle.projects.dtos.RoomDto;
 import com.codingshuttle.projects.entities.Hotel;
 import com.codingshuttle.projects.entities.Room;
 import com.codingshuttle.projects.exceptions.ResourceNotFoundException;
@@ -91,5 +93,16 @@ public class HotelServiceImpl implements HotelService{
                 .map(hotel -> modelMapper.map(hotel, HotelDto.class))
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public HotelInfoDto getHotelInfo(Long hotelId) {
+        Hotel hotel = isHotelExistsById(hotelId);
+        List<RoomDto> rooms = hotel
+                .getRooms()
+                .stream()
+                .map(room -> modelMapper.map(room, RoomDto.class))
+                .collect(Collectors.toList());
+        return new HotelInfoDto(modelMapper.map(hotel, HotelDto.class),rooms);
     }
 }

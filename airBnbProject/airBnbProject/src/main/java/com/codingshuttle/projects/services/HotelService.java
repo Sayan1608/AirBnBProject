@@ -1,7 +1,9 @@
 package com.codingshuttle.projects.services;
 
 import com.codingshuttle.projects.dtos.HotelDto;
+import com.codingshuttle.projects.dtos.HotelInfoDto;
 import com.codingshuttle.projects.entities.Hotel;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -14,4 +16,6 @@ public interface HotelService {
     Hotel isHotelExistsById(Long id);
 
     List<HotelDto> getAllHotels();
+
+    HotelInfoDto getHotelInfo(Long hotelId);
 }
