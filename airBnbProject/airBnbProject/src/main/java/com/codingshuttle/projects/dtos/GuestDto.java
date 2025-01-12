@@ -1,8 +1,13 @@
 package com.codingshuttle.projects.dtos;
 
 import com.codingshuttle.projects.entities.enums.Gender;
-import jakarta.persistence.*;
+import lombok.*;
 
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class GuestDto {
     private Long id;
     private String name;
