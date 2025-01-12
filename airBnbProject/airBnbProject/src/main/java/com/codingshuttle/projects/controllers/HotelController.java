@@ -45,7 +45,7 @@ public class HotelController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping(path = "/{hotelId}")
+    @PatchMapping(path = "/{hotelId}/activate")
     public ResponseEntity<Void> activateHotel(@PathVariable Long hotelId){
         log.info("Attempting to activate hotel with id: {}",hotelId);
         hotelService.activateHotel(hotelId);
