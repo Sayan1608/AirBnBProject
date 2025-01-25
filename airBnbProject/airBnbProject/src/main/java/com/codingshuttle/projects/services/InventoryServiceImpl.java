@@ -38,6 +38,7 @@ public class InventoryServiceImpl implements InventoryService{
                     .room(room)
                     .hotel(room.getHotel())
                     .bookedCount(0)
+                    .reservedCount(0)
                     .totalCount(room.getTotalCount())
                     .city(room.getHotel().getCity())
                     .closed(false)
@@ -61,7 +62,7 @@ public class InventoryServiceImpl implements InventoryService{
                 ChronoUnit.DAYS.between(hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate()) + 1;
 
         Page<Hotel> hotelPage = inventoryRepository.getHotelByInventories(hotelSearchRequest.getCity(), hotelSearchRequest.getStartDate()
-                , hotelSearchRequest.getEndDate(), daysCount, hotelSearchRequest.getRoomsCount(), pageable);
+                , hotelSearchRequest.getEndDate(), hotelSearchRequest.getRoomsCount(), daysCount, pageable);
 
         return hotelPage.map(hotel -> modelMapper.map(hotel, HotelDto.class));
     }
