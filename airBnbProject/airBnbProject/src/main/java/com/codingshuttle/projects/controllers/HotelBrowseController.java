@@ -2,6 +2,7 @@ package com.codingshuttle.projects.controllers;
 
 import com.codingshuttle.projects.dtos.HotelDto;
 import com.codingshuttle.projects.dtos.HotelInfoDto;
+import com.codingshuttle.projects.dtos.HotelPriceDto;
 import com.codingshuttle.projects.dtos.HotelSearchRequest;
 import com.codingshuttle.projects.services.HotelService;
 import com.codingshuttle.projects.services.InventoryService;
@@ -19,8 +20,8 @@ public class HotelBrowseController {
     private final HotelService hotelService;
 
     @GetMapping("/search")
-    public ResponseEntity<Page<HotelDto>> searchHotel(@RequestBody HotelSearchRequest hotelSearchRequest){
-        Page<HotelDto> hotelDtoPage = inventoryService.searchHotelBasedOnInventory(hotelSearchRequest);
+    public ResponseEntity<Page<HotelPriceDto>> searchHotel(@RequestBody HotelSearchRequest hotelSearchRequest){
+        var hotelDtoPage = inventoryService.searchHotelBasedOnInventory(hotelSearchRequest);
         return ResponseEntity.ok(hotelDtoPage);
     }
 
